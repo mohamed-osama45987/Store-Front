@@ -9,6 +9,7 @@
     "build": "npx tsc",
     "start": "npm run build && nodemon build/index.js",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts)\"",
+    "cleanDB": "db-migrate reset && db-migrate up",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],

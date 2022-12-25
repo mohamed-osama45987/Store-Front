@@ -13,11 +13,21 @@ export class Order {
     try {
       const conn = await Client.connect()
 
-      const sql = `SELECT orders.id AS "orderId", users.firstname, users.lastname, products.product_name, orders.status, orders.quantity, products.price AS "Item_price", 
-                  (products.price * orders.quantity ) AS "Total_order_price"
-                  FROM orders INNER JOIN products ON products.id = orders.product_id 
-                  INNER JOIN users ON users.id = orders.user_id 
-                  WHERE orders.user_id =($1);`
+      const sql = `
+  SELECT
+      order_products.id,
+      products.product_name,
+      orders.status AS "order_status",
+      order_products.quantity,
+      products.price AS "Item_price",
+      (products.price * order_products.quantity) AS "Total_order_price"
+  FROM
+      order_products
+      INNER JOIN products ON order_products.product_id = products.id
+      INNER JOIN orders ON order_products.order_id = orders.id
+  WHERE
+      orders.user_id = ($1) AND orders.status = 'active';
+      `
 
       const result = await conn.query(sql, [userId])
 
@@ -29,25 +39,51 @@ export class Order {
     }
   }
 
-  static async createOrder(userId: number, productId: number, quantity: number) {
+  static async createOrder(userId: number) {
     try {
       const conn = await Client.connect()
 
-      const sql = `INSERT INTO orders (quantity,status,product_id,user_id) VALUES (($1),'active',($2),($3)) RETURNING *;`
+      const orderSql = `INSERT INTO orders (user_id) VALUES (($1)) RETURNING *;`
 
-      const result = await conn.query(sql, [quantity, productId, userId])
+      const resultedOrder = await conn.query(orderSql, [userId])
 
-      const createdOrder: {
-        id: number
-        quantity: number
-        status: string
-        product_id: number
-        user_id: number
-      }[] = result.rows[0]
+      conn.release()
 
-      return createdOrder
+      return resultedOrder.rows[0]
     } catch (error) {
       throw new Error(`Can not creat order ${error}`)
+    }
+  }
+
+  static async addProductToOrder(orderId: number, productId: number, quantity: number) {
+    try {
+      const conn = await Client.connect()
+
+      const orderProductsSql = `INSERT INTO order_products (order_id, product_id, quantity) VALUES (($1),($2),($3)) RETURNING *;`
+
+      const resultedOrderProducts = await conn.query(orderProductsSql, [
+        orderId,
+        productId,
+        quantity
+      ])
+      conn.release()
+      return resultedOrderProducts.rows[0]
+    } catch (error) {
+      throw new Error('can not add product to an order')
+    }
+  }
+
+  static async orderExist(orderId: number) {
+    try {
+      const conn = await Client.connect()
+
+      const orderProductsSql = `SELECT * FROM orders WHERE id=($1);`
+
+      const order = await conn.query(orderProductsSql, [orderId])
+      conn.release()
+      return order.rows[0]
+    } catch (error) {
+      throw new Error('can not add product to an order')
     }
   }
 }

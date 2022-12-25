@@ -8,3 +8,4 @@ INSERT INTO
     products(product_name, price)
 VALUES
     ('testproduct', 99.99);
+

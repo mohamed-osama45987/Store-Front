@@ -4,45 +4,45 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application.
 
-
-Token must be passed inside the [ Authorization key ] inside the request header for each request that require token 
+Token must be passed inside the [ Authorization key ] inside the request header for each request that require token
 
 ## API Endpoints
 
 #### Users
 
-- Authenticate 
+- Authenticate
+
   - HTTP verb `POST`
   - Endpoint:- `/api/users/authenticate`
   - Request Body
 
     ```json
-      {
-        "firstname": "testfirstname",
-        "lastname": "testlastname",
-        "password":"1234"
-      }
+    {
+      "firstname": "testfirstname",
+      "lastname": "testlastname",
+      "password": "1234"
+    }
     ```
 
   - Response Body -- `User object and jwt token`
 
     ```json
-      {
-       "user": {
-          "id": 1,
-          "firstname": "testfirstname",
-          "lastname": "testlastname",
-          "password": "$2b$10$7WtkC6aZWOL3KBB3IyV8keWvqTUHNPfQlTuDNB.Hw1g89BFNXKvpC"
-       },
-    
-        "token": "eyJhbGciOiJIUzI1NiJ9.MQ.mSUkVpRC--4hzILGT4p2vNBsKfScYIMGhLh3cxSJ3to",
+    {
+      "user": {
+        "id": 1,
+        "firstname": "testfirstname",
+        "lastname": "testlastname",
+        "password": "$2b$10$7WtkC6aZWOL3KBB3IyV8keWvqTUHNPfQlTuDNB.Hw1g89BFNXKvpC"
+      },
 
-        "message": "User Found sucessfully"
-      }
+      "token": "eyJhbGciOiJIUzI1NiJ9.MQ.mSUkVpRC--4hzILGT4p2vNBsKfScYIMGhLh3cxSJ3to",
+
+      "message": "User Found sucessfully"
+    }
     ```
 
-
 - Index [token required]
+
   - HTTP verb `GET`
   - Endpoint:- `/api/users/index`
   - Request Body
@@ -74,8 +74,6 @@ Token must be passed inside the [ Authorization key ] inside the request header 
       }
     ```
 
-
-
 - Show [token required]
 
   - HTTP verb `GET`
@@ -89,56 +87,53 @@ Token must be passed inside the [ Authorization key ] inside the request header 
   - Response Body -- ` User object`
 
     ```json
-        {
-            "user": {
-            "id": 1,
-            "firstname": "testfirstname",
-            "lastname": "testlastname",
-            "password": "$2b$10$7WtkC6aZWOL3KBB3IyV8keWvqTUHNPfQlTuDNB.Hw1g89BFNXKvpC"
-          },
+    {
+      "user": {
+        "id": 1,
+        "firstname": "testfirstname",
+        "lastname": "testlastname",
+        "password": "$2b$10$7WtkC6aZWOL3KBB3IyV8keWvqTUHNPfQlTuDNB.Hw1g89BFNXKvpC"
+      },
 
-          "message": "User retrieved successfully "
-        }
+      "message": "User retrieved successfully "
+    }
     ```
 
+- Create [token required]
 
-
-- Create [token required] 
   - HTTP verb `POST`
   - Endpoint:- `/api/users/createuser`
   - Request Body
 
     ```json
-      {
-        "firstname": "testuser2",
-        "lastname": "testuser2",
-        "password":"1234"
-      }
+    {
+      "firstname": "testuser2",
+      "lastname": "testuser2",
+      "password": "1234"
+    }
     ```
 
   - Response Body -- `User object and jwt token`
 
     ```json
-      {
-        "token": "eyJhbGciOiJIUzI1NiJ9.Mg.fjsKYdBwr7jj2ngEU203dODjG-uTBy0Wec4pw1DQOLI",
+    {
+      "token": "eyJhbGciOiJIUzI1NiJ9.Mg.fjsKYdBwr7jj2ngEU203dODjG-uTBy0Wec4pw1DQOLI",
 
-        "createdUser": {
-            "id": 2,
-            "firstname": "testuser2",
-            "lastname": "testuser2",
-            "password": "$2b$10$oUJ0AdKjBTvV/GKnAAreQOuOxcrf6wFl0YHal1XSXKoQep2Z8daLy"
-          },
+      "createdUser": {
+        "id": 2,
+        "firstname": "testuser2",
+        "lastname": "testuser2",
+        "password": "$2b$10$oUJ0AdKjBTvV/GKnAAreQOuOxcrf6wFl0YHal1XSXKoQep2Z8daLy"
+      },
 
-        "message": "User created successfully"
-      }
+      "message": "User created successfully"
+    }
     ```
-
-
 
 #### Products
 
-
 - Index
+
   - HTTP verb `GET`
   - Endpoint:- `/api/products/index`
   - Request Body
@@ -151,7 +146,7 @@ Token must be passed inside the [ Authorization key ] inside the request header 
 
     ```json
       {
-        
+
          "products": [
                 {
                     "id": 1,
@@ -163,9 +158,8 @@ Token must be passed inside the [ Authorization key ] inside the request header 
       }
     ```
 
-
-
 - Show
+
   - HTTP verb `GET`
   - Endpoint:- `/api/products/show?name=testproduct`
   - Request Body
@@ -177,51 +171,49 @@ Token must be passed inside the [ Authorization key ] inside the request header 
   - Response Body -- `Product object`
 
     ```json
-     {
-            "product": {
-                "id": 1,
-                "product_name": "testproduct",
-                "price": "99.99"
-                 },
+    {
+      "product": {
+        "id": 1,
+        "product_name": "testproduct",
+        "price": "99.99"
+      },
 
-            "message": "Product shown successfully"
+      "message": "Product shown successfully"
     }
     ```
 
-
 - Create **`token required`**
+
   - HTTP verb `POST`
   - Endpoint:- `/api/products/createproduct`
   - Request Body
 
     ```json
-      {
-        "name": 'test product 2',
-        "price": 99.99
-      }
+    {
+      "name": "test product 2",
+      "price": 99.99
+    }
     ```
 
   - Response Body -- `Product object`
 
     ```json
     {
-        "createdProduct": {
-            "id": 2,
-            "product_name": "test product 2",
-            "price": "99.99"
-        },
-        "message": "Product created successfully"
+      "createdProduct": {
+        "id": 2,
+        "product_name": "test product 2",
+        "price": "99.99"
+      },
+      "message": "Product created successfully"
     }
     ```
-
-
 
 #### Orders
 
 - Current Order by user (args: user id)[token required]
-  
+
   - HTTP verb `GET`
-  - Endpoint:- `/api/orders/user/:id`
+  - Endpoint:- `/api/orders/index/:userid`
   - Request Body
 
     ```json
@@ -230,60 +222,81 @@ Token must be passed inside the [ Authorization key ] inside the request header 
 
   - Response Body -- `Array of Order objects`
 
-    ```json
-       {
-          "userOrders": [
-             {
-                "orderId": 1,
-                "firstname": "testfirstname",
-                "lastname": "testlastname",
+        ```json
+           {
+        "userOrders": [
+            {
+                "id": 2,
                 "product_name": "testproduct",
-                "status":"active"
+                "order_status": "active",
                 "quantity": 2,
                 "Item_price": "99.99",
                 "Total_order_price": "199.98"
-             }
-          ],
+            }
 
-          "message": "All user orders retrieved successfully"
-        }
+        ],
+        "message": "All user orders retrieved successfully"
+
+    }
+
     ```
 
+    ```
 
 - Create Order (args: user id)[token required]
-  
+
   - HTTP verb `POST`
-  - Endpoint:- `/api/orders/user/:id`
+  - Endpoint:- `/api/orders/create/:userid`
   - Request Body
 
     ```json
-      {
-        "quantity": 5,
-        "productId": 1
-      }
+    {
+      "quantity": 5,
+      "productId": 1
+    }
     ```
 
   - Response Body -- `Array of Order objects`
 
     ```json
-     {
-        "message": "Order created successfully",
+    {
+      "message": "Order created successfully",
 
-        "order": {
-                "id": 5,
-                "quantity": 20,
-                "status": "active",
-                "product_id": 1,
-                 "user_id": 1
-            }
+      "order": {
+        "id": 5,
+        "status": "active",
+        "user_id": 1
       }
+    }
     ```
 
+    - Add Products To Order (args: user id)[token required]
 
+  - HTTP verb `POST`
+  - Endpoint:- `/api/orders/add`
+  - Request Body
 
+    ```json
+    {
+      "orderId": 1,
+      "quantity": 5,
+      "productId": 1
+    }
+    ```
 
+  - Response Body -- `Array of Order objects`
 
-
+    ```json
+    {
+      "message": "Product added successfully",
+      "addedProduct": {
+        "id": 2,
+        "order_id": 1,
+        "product_id": 1,
+        "quantity": 5
+      }
+    }
+    ```
 
 ## Database Schemas
 
@@ -308,7 +321,6 @@ VALUES
     );
 ```
 
-
 #### Products Schema
 
 ```sql
@@ -325,28 +337,42 @@ VALUES
 
 ```
 
-
 #### Orders Schema
 
 ```sql
+
 CREATE TABLE orders(
     id SERIAL PRIMARY KEY,
-    quantity integer,
     status VARCHAR(50) DEFAULT 'active',
-    product_id integer REFERENCES products(id),
     user_id integer REFERENCES users(id)
 );
 
 INSERT INTO
-    orders(quantity, product_id, user_id)
+    orders(user_id)
 VALUES
-    (2, 1, 1);
+    (1);
 
 ```
 
+#### Order_products Schema
+
+```sql
+
+CREATE TABLE order_products (
+    id SERIAL PRIMARY KEY,
+    order_id integer REFERENCES orders(id),
+    product_id integer REFERENCES products(id),
+    quantity integer
+);
+
+INSERT INTO
+    order_products(order_id, product_id, quantity)
+VALUES
+    (1, 1, 2);
+
+```
 
 ## Data Shapes
-
 
 #### Product
 
@@ -356,10 +382,10 @@ type product = {
   product_name: string
   price: number
 }
-
 ```
 
 #### User
+
 ```typescript
 export type user = {
   id: number
@@ -370,8 +396,9 @@ export type user = {
 ```
 
 #### Orders
+
 ```typescript
- type ordertype = {
+type ordertype = {
   readonly orderId: number
   quantity: number
   status: string
@@ -379,6 +406,7 @@ export type user = {
   readonly user_id: number
 }
 ```
+
 ## Database Schemas
 
 #### Users Schema
@@ -402,7 +430,6 @@ VALUES
     );
 ```
 
-
 #### Products Schema
 
 ```sql
@@ -419,7 +446,6 @@ VALUES
 
 ```
 
-
 #### Orders Schema
 
 ```sql
@@ -431,11 +457,10 @@ CREATE TABLE orders(
     user_id integer REFERENCES users(id)
 );
 
+
 INSERT INTO
     orders(quantity, product_id, user_id)
 VALUES
     (2, 1, 1);
 
 ```
-
-

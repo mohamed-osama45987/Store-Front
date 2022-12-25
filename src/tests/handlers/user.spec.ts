@@ -19,7 +19,6 @@ describe('User handlers tests', () => {
   it('/users/api/createuser should return a token when a user is created', async () => {
     const response = await request
       .post('/api/users/createuser')
-      .set('Authorization', token)
       .send({ firstname: 'testuser2', lastname: 'testuser2', password: '1234' })
 
     expect(response.status).toBe(200)

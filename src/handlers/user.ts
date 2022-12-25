@@ -184,7 +184,6 @@ userRouter.get(
 
 userRouter.post(
   '/users/createuser',
-  isAuth,
   [
     body('firstname')
       .exists({ checkFalsy: true })

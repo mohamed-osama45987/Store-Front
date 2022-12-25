@@ -53,13 +53,15 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const userId = req.params.id as unknown as number
+    const userId = req.params.userid as unknown as number
 
     const quantity = req.body.quantity as unknown as number
 
     const productId = req.body.productId as unknown as number
 
-    const order = await Order.createOrder(userId, productId, quantity)
+    const order = await Order.createOrder(userId)
+
+    await Order.addProductToOrder(order.id, productId, quantity) // adding your product to the newly created order
 
     if (!order) {
       // if no users in the data base
@@ -77,8 +79,54 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const addedProductToExistingOrder = async (req: Request, res: Response, next: NextFunction) => {
+  const validationErrors = validationResult(req)
+
+  if (!validationErrors.isEmpty()) {
+    const error: errorCode = new Error('Validation errors')
+    error.statusCode = 400
+    error.validationErrors = validationErrors.array() as validationErrorObject[]
+
+    return next(error)
+  }
+
+  try {
+    const orderId = req.body.orderId as unknown as number
+
+    const quantity = req.body.quantity as unknown as number
+
+    const productId = req.body.productId as unknown as number
+
+    const orderExist = await Order.orderExist(orderId)
+
+    if (!orderExist || orderExist.status === 'complete') {
+      const error: errorCode = new Error('Order does not exist please create new one')
+
+      error.statusCode = 404
+
+      throw error
+    }
+
+    const addProduct = await Order.addProductToOrder(orderId, productId, quantity)
+
+    if (!addProduct) {
+      // if no users in the data base
+      const error: errorCode = new Error('can not add product to order')
+
+      error.statusCode = 404
+
+      throw error
+    }
+
+    res.status(200).json({ message: 'Product added successfully', addedProduct: addProduct })
+    return null
+  } catch (error) {
+    return next(error) as unknown as NextFunction
+  }
+}
+
 orderRoutes.get(
-  '/orders/user/:userid',
+  '/orders/index/:userid',
   [
     param('userid')
       .exists({ checkFalsy: true })
@@ -92,10 +140,10 @@ orderRoutes.get(
 )
 
 orderRoutes.post(
-  '/orders/user/:id',
+  '/orders/create/:userid',
   isAuth,
   [
-    param('id')
+    param('userid')
       .exists({ checkFalsy: true })
       .withMessage('userid parameter can not be empty')
       .isNumeric()
@@ -107,7 +155,28 @@ orderRoutes.post(
       .isNumeric()
       .withMessage('quantity must be number')
       .trim(),
-    body('userId')
+
+    body('productId')
+      .exists({ checkFalsy: true })
+      .withMessage('productId can not be empty')
+      .isNumeric()
+      .withMessage('productId must be number')
+      .trim()
+  ],
+  createOrder
+)
+
+orderRoutes.post(
+  '/orders/add',
+  isAuth,
+  [
+    body('quantity')
+      .exists({ checkFalsy: true })
+      .withMessage('quantity can not be empty')
+      .isNumeric()
+      .withMessage('quantity must be number')
+      .trim(),
+    body('orderId')
       .exists({ checkFalsy: true })
       .withMessage('userId can not be empty')
       .isNumeric()
@@ -120,7 +189,7 @@ orderRoutes.post(
       .withMessage('productId must be number')
       .trim()
   ],
-  createOrder
+  addedProductToExistingOrder
 )
 
 export default orderRoutes
