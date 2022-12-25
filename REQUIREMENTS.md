@@ -99,7 +99,7 @@ Token must be passed inside the [ Authorization key ] inside the request header 
     }
     ```
 
-- Create [token required]
+- Create 
 
   - HTTP verb `POST`
   - Endpoint:- `/api/users/createuser`
